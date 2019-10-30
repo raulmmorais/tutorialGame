@@ -2,7 +2,11 @@ package com.tutorial.game.screen;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.ChainShape;
@@ -12,14 +16,26 @@ import com.tutorial.game.TutorialGame;
 
 import static com.tutorial.game.TutorialGame.BIT_GROUND;
 import static com.tutorial.game.TutorialGame.BIT_PLAYER;
+import static com.tutorial.game.TutorialGame.UNIT_SCALE;
 
 public class GameScreen extends AbstractScreen {
     private final BodyDef bodyDef;
     private final FixtureDef fixtureDef;
     private final Body player;
 
+    private final OrthogonalTiledMapRenderer mapRenderer;
+    private final AssetManager assetManager;
+    private final OrthographicCamera gameCamera;
+
     public GameScreen(TutorialGame context) {
         super(context);
+
+        mapRenderer = new OrthogonalTiledMapRenderer(null, UNIT_SCALE, context.getSpriteBatch());
+
+        assetManager = context.getAssetManager();
+
+        gameCamera = context.getCamera();
+
         this.bodyDef = new BodyDef();
         this.fixtureDef = new FixtureDef();
 
@@ -62,7 +78,7 @@ public class GameScreen extends AbstractScreen {
 
     @Override
     public void show() {
-
+        mapRenderer.setMap(assetManager.get("map/map.tmx", TiledMap.class));
     }
 
     @Override
@@ -75,6 +91,8 @@ public class GameScreen extends AbstractScreen {
         }
 
         viewport.apply(true);
+        mapRenderer.setView(gameCamera);
+        mapRenderer.render();
         box2DDebugRenderer.render(world, viewport.getCamera().combined);
     }
 
