@@ -3,6 +3,7 @@ package com.tutorial.game.screen;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.tutorial.game.TutorialGame;
 
@@ -13,7 +14,9 @@ public class LoadingScreen extends AbstractScreen{
     public LoadingScreen(final TutorialGame context) {
         super(context);
         assetManager = context.getAssetManager();
+        //assetManager.load("badlogic.jpg", Texture.class);
         assetManager.load("map/map.tmx", TiledMap.class);
+
     }
 
     @Override

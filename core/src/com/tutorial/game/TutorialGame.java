@@ -11,6 +11,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.tiled.TideMapLoader;
 import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Box2D;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
@@ -28,24 +29,23 @@ import java.util.EnumMap;
 public class TutorialGame extends Game {
 	private static final String TAG = TutorialGame.class.getSimpleName();
 
-	private SpriteBatch spriteBatch;
+	public static final float UNIT_SCALE = 1 / 32;
+	public static final short BIT_PLAYER = 1 << 1;
+	public static final short BIT_BOX = 1 << 2;
+	public static final short BIT_GROUND = 1 << 3;
 
+	private AssetManager assetManager;
+	private SpriteBatch spriteBatch;
+	private WorldContactListener worldContactListener;
 	private EnumMap<ScreenType, AbstractScreen> screenCache;
 	private OrthographicCamera camera;
 	private FitViewport screenViewport;
-
-	public static final short BIT_PLAYER = 1 << 0;
-	public static final short BIT_BOX = 1 << 1;
-	public static final short BIT_GROUND = 1 << 2;
-	public static final float UNIT_SCALE = 1 / 32;
 	private World world;
-	private WorldContactListener worldContactListener;
 	private Box2DDebugRenderer box2DDebugRenderer;
 
 	private static final float FIXED_TIME = 1/60f;
 	private float accumulator;
 
-	private AssetManager assetManager;
 
 	@Override
 	public void create () {
@@ -54,13 +54,13 @@ public class TutorialGame extends Game {
 
 		accumulator = 0;
 		Box2D.init();
+		world = new World(Vector2.Zero, true);
 		worldContactListener = new WorldContactListener();
-		world = new World(new Vector2(0, -9.8f), true);
 		world.setContactListener(worldContactListener);
 		box2DDebugRenderer = new Box2DDebugRenderer();
 
 		assetManager = new AssetManager();
-		assetManager.setLoader(TiledMap.class, new TideMapLoader(assetManager.getFileHandleResolver()));
+		assetManager.setLoader(TiledMap.class, new TmxMapLoader(assetManager.getFileHandleResolver()));
 
 		camera = new OrthographicCamera();
 		screenViewport = new FitViewport(9, 16, camera);
