@@ -1,7 +1,6 @@
 package com.tutorial.game.screen;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -13,50 +12,68 @@ import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.ChainShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.tutorial.game.TutorialGame;
+import com.tutorial.game.input.GameKeys;
+import com.tutorial.game.input.InputManager;
 import com.tutorial.game.map.CollisionArea;
 import com.tutorial.game.map.Map;
+import com.tutorial.game.ui.GameUI;
 
 import static com.tutorial.game.TutorialGame.BIT_GROUND;
 import static com.tutorial.game.TutorialGame.BIT_PLAYER;
 import static com.tutorial.game.TutorialGame.UNIT_SCALE;
+import static com.tutorial.game.input.GameKeys.DOWN;
+import static com.tutorial.game.input.GameKeys.LEFT;
+import static com.tutorial.game.input.GameKeys.RIGHT;
+import static com.tutorial.game.input.GameKeys.UP;
 
 public class GameScreen extends AbstractScreen {
     private final BodyDef bodyDef;
     private final FixtureDef fixtureDef;
-
-    private final Body player;
-
     private final AssetManager assetManager;
     private final Map map;
     private final OrthogonalTiledMapRenderer mapRenderer;
     private final OrthographicCamera gameCamera;
     private final GLProfiler profiler;
 
+    private Body player;
+
+    private boolean directionChange;
+    private int xFactor;
+    private int yFactor;
+
     public GameScreen(TutorialGame context) {
         super(context);
-
         assetManager = context.getAssetManager();
         mapRenderer = new OrthogonalTiledMapRenderer(null, UNIT_SCALE, context.getSpriteBatch());
         this.gameCamera = context.getCamera();
-
         profiler = new GLProfiler(Gdx.graphics);
         profiler.enable();
-
         this.bodyDef = new BodyDef();
         this.fixtureDef = new FixtureDef();
+        final TiledMap tiledMap = assetManager.get("map/map.tmx", TiledMap.class);
+        mapRenderer.setMap(tiledMap);
+        map = new Map(tiledMap);
+        spawnCollisionAreas();
+        spawnPlayer();
+    }
 
+    @Override
+    protected Table getScreenUI(TutorialGame context) {
+        return new GameUI(context);
+    }
+
+    private void spawnPlayer(){
         //create a player
-        bodyDef.position.set(4.5f, 3);
-        bodyDef.gravityScale = 1;
+        resetBodieAndFixture();
+        bodyDef.position.set(map.getStartLocator().x, map.getStartLocator().y + 0.5f);
         bodyDef.type = BodyDef.BodyType.DynamicBody;
         player = world.createBody(bodyDef);
         player.setUserData("Player");
 
         fixtureDef.density = 1;
-        fixtureDef.isSensor = false;
-        fixtureDef.restitution = 0;
-        fixtureDef.friction = 0.2f;
         fixtureDef.filter.categoryBits = BIT_PLAYER;
         fixtureDef.filter.maskBits = BIT_GROUND;
         final PolygonShape pShape = new PolygonShape();
@@ -64,12 +81,6 @@ public class GameScreen extends AbstractScreen {
         fixtureDef.shape = pShape;
         player.createFixture(fixtureDef);
         pShape.dispose();
-
-        final TiledMap tiledMap = assetManager.get("map/map.tmx", TiledMap.class);
-        mapRenderer.setMap(tiledMap);
-        map = new Map(tiledMap);
-
-        spawnCollisionAreas();
     }
 
     private void resetBodieAndFixture(){
@@ -107,24 +118,27 @@ public class GameScreen extends AbstractScreen {
     }
 
     @Override
-    public void show() {
-    }
-
-    @Override
     public void render(float delta) {
-        Gdx.gl.glClearColor(0, 0, 0, 1);
+        Gdx.gl.glClearColor(.2f, 0.1f, 1, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        //final float speedX;
-        //final float speedY;
+        if (directionChange) {
+            player.applyLinearImpulse(
+                    (xFactor * 3 - player.getLinearVelocity().x) * player.getMass(),
+                    (yFactor * 3 - player.getLinearVelocity().y) * player.getMass(),
+                    player.getWorldCenter().x, player.getWorldCenter().y, true
+            );
+        }
 
         viewport.apply(true);
         mapRenderer.setView(gameCamera);
         mapRenderer.render();
         box2DDebugRenderer.render(world, viewport.getCamera().combined);
-        Gdx.app.debug("RenderInfo", "Bindings " + profiler.getTextureBindings());
-        Gdx.app.debug("RenderInfo", "Drawcalls " + profiler.getDrawCalls());
-        profiler.reset();
+        if (profiler.isEnabled()){
+            Gdx.app.debug("RenderInfo", "Bindings " + profiler.getTextureBindings());
+            Gdx.app.debug("RenderInfo", "Drawcalls " + profiler.getDrawCalls());
+            profiler.reset();
+        }
     }
 
     @Override
@@ -143,12 +157,55 @@ public class GameScreen extends AbstractScreen {
     }
 
     @Override
-    public void hide() {
-
+    public void dispose() {
+        mapRenderer.dispose();
     }
 
     @Override
-    public void dispose() {
-        mapRenderer.dispose();
+    public void keyPressed(InputManager manager, GameKeys key) {
+        switch (key){
+            case LEFT:
+                directionChange = true;
+                xFactor = -1;
+                break;
+            case RIGHT:
+                directionChange = true;
+                xFactor = 1;
+                break;
+            case UP:
+                directionChange = true;
+                yFactor = 1;
+                break;
+            case DOWN:
+                directionChange = true;
+                yFactor = -1;
+                break;
+            default:
+                return;
+        }
+    }
+
+    @Override
+    public void keyUp(InputManager manager, GameKeys key) {
+        switch (key){
+            case LEFT:
+                directionChange = true;
+                xFactor = manager.isKeyPressed(RIGHT) ? 1: 0;
+                break;
+            case RIGHT:
+                directionChange = true;
+                xFactor = manager.isKeyPressed(LEFT) ? -1: 0;
+                break;
+            case UP:
+                directionChange = true;
+                yFactor = manager.isKeyPressed(DOWN) ? -1: 0;
+                break;
+            case DOWN:
+                directionChange = true;
+                yFactor = manager.isKeyPressed(UP) ? 1: 0;
+                break;
+            default:
+                return;
+        }
     }
 }

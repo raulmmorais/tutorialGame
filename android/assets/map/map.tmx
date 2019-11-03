@@ -6,12 +6,12 @@
    eJztw0ENAAAMA6HTV/+CJmMfSFg1VVVVVVVVVVVVVVVVVVVV9fUBLQ6gPQ==
   </data>
  </layer>
- <layer id="2" name="background_1" width="64" height="64">
+ <layer id="2" name="background_1" width="64" height="64" offsetx="-64" offsety="32">
   <data encoding="base64" compression="zlib">
-   eJztl0luAkEMRX2ahjAkzEOWCeP9L4S/oCQ3UqRsmhbl96S3oFf1ZZdxmQEAAAAAAAAAAAAAAAAAAAAAAAAAAMA7cnAvf3js8Vyv4uR+uht35a7dhTt3rz2eq2tK3ZX/y/12l+6HO3Onds9faw8o9ygY88fvtfZAzK/eX1re/KX2xbXlyr93t8Gd5cnfWLvfxw+z5H92avnuf8ys2mselhlQc/6JtWtd7oLmYfkfqDn/wNp73+Ch5mGZgbXnj3uPfqsHhpbj/mvPj/n1DsiUX3t+zK93gHogy/x/fveo/pnyq9djft2HbPnL7qt5n63+qncTzFT/H/f8D3/7OmCH3ACb/CvF
+   eJzt10kOwjAQRNE+DWGeQpjWgOD+F6JLxFIHiS0I939SLcgqpbaNYwYAAAAAAAAAAAAAAAAAAADgH1089w+5/vC9vuXmWXr2np2n82w9G8/jh+/1DZqx+q88Z0/rmXjWnoW9+te8BqYhsX98XvMaKB219lvL27/MvqSzXP1PnkPI0fL0H9lwvc/6ZOn/noXl2/+xs2av87CcATX3n9tw1mUv6Dws/wM1929seO9r+ug8LGdg7f3jvUe/tQbGlmP/654f++s7IFN/3fNjf30HaA1kOf/fv3s0/0z9tdZjf+2HbP3L3Vfnfbb5a96jkGzzz+oJmCEkHQ==
   </data>
  </layer>
- <layer id="3" name="background_2" width="64" height="64">
+ <layer id="3" name="background_2" width="64" height="64" offsetx="-64" offsety="32">
   <data encoding="base64" compression="zlib">
    eJzt17ENgCAURVH2cgEnsHH/PSzsCIbEX/2XcxIaXnVDxRgAAAAAAAAAAAAAAHRz/twSHNP5uku169OfTX9t705/be9Of23vTn9t707/69rsqbz/2r3ZU8x/3dUhzwPZDAuh
   </data>
@@ -21,17 +21,16 @@
    eJztwTEBAAAAwqD1T20MH6AAAAAAAAAAAAAAAAAAAACAtwFAAAAB
   </data>
  </layer>
- <objectgroup color="#ff0000" id="7" name="collision">
+ <objectgroup color="#ff0000" id="7" name="collision" offsetx="-64" offsety="32">
   <object id="4" x="225.333" y="1536">
    <polyline points="0,0 94.6667,0 94.6667,448 -129.333,448 -129.333,0 -33.3333,0"/>
   </object>
-  <object id="5" x="128.989" y="1888.67" width="29.6774" height="30.6667"/>
  </objectgroup>
- <objectgroup id="5" name="gameObjects">
+ <objectgroup id="5" name="gameObjects" offsetx="-64" offsety="32">
   <object id="2" gid="12" x="124" y="1690.67" width="32" height="32"/>
   <object id="3" gid="1" x="285.333" y="1883.33" width="32" height="32"/>
  </objectgroup>
- <objectgroup id="6" name="playerStartLocation">
+ <objectgroup id="6" name="playerStartLocation" offsetx="-64" offsety="32">
   <object id="1" x="206" y="1870.67">
    <point/>
   </object>
