@@ -30,6 +30,7 @@ import com.badlogic.gdx.utils.ObjectMap;
 import com.badlogic.gdx.utils.reflect.ClassReflection;
 import com.badlogic.gdx.utils.reflect.ReflectionException;
 import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.tutorial.game.ECS.ECSEngine;
 import com.tutorial.game.audio.AudioManager;
 import com.tutorial.game.input.InputManager;
 import com.tutorial.game.screen.AbstractScreen;
@@ -66,6 +67,8 @@ public class TutorialGame extends Game {
 
 	private AudioManager audioManager;
 
+	private ECSEngine ecsEngine;
+
 	@Override
 	public void create () {
 		Gdx.app.setLogLevel(Application.LOG_DEBUG);
@@ -89,6 +92,7 @@ public class TutorialGame extends Game {
 		inputManager = new InputManager();
 		Gdx.input.setInputProcessor(new InputMultiplexer(inputManager, stage));
 
+		ecsEngine = new ECSEngine(this);
 		camera = new OrthographicCamera();
 		screenViewport = new FitViewport(9, 16, camera);
 		screenCache = new EnumMap<ScreenType, AbstractScreen>(ScreenType.class);
@@ -123,7 +127,11 @@ public class TutorialGame extends Game {
 		i18NBundle = assetManager.get("ui/strings", I18NBundle.class);
 	}
 
-    public AudioManager getAudioManager() {
+	public ECSEngine getEcsEngine() {
+		return ecsEngine;
+	}
+
+	public AudioManager getAudioManager() {
         return audioManager;
     }
 
@@ -188,6 +196,7 @@ public class TutorialGame extends Game {
 	public void render() {
 		super.render();
 
+		ecsEngine.update(Gdx.graphics.getRawDeltaTime());
 		accumulator += Math.min(0.25f, Gdx.graphics.getRawDeltaTime());
 		while (accumulator >= FIXED_TIME){
 			world.step(FIXED_TIME, 6, 2);

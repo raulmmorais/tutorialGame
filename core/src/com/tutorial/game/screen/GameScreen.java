@@ -38,12 +38,6 @@ public class GameScreen extends AbstractScreen {
     private final OrthographicCamera gameCamera;
     private final GLProfiler profiler;
 
-    private Body player;
-
-    private boolean directionChange;
-    private int xFactor;
-    private int yFactor;
-
     public GameScreen(TutorialGame context) {
         super(context);
         assetManager = context.getAssetManager();
@@ -57,30 +51,12 @@ public class GameScreen extends AbstractScreen {
         mapRenderer.setMap(tiledMap);
         map = new Map(tiledMap);
         spawnCollisionAreas();
-        spawnPlayer();
+        context.getEcsEngine().createPlayer(map.getStartLocator());
     }
 
     @Override
     protected Table getScreenUI(TutorialGame context) {
         return new GameUI(context);
-    }
-
-    private void spawnPlayer(){
-        //create a player
-        resetBodieAndFixture();
-        bodyDef.position.set(map.getStartLocator().x, map.getStartLocator().y + 0.5f);
-        bodyDef.type = BodyDef.BodyType.DynamicBody;
-        player = world.createBody(bodyDef);
-        player.setUserData("Player");
-
-        fixtureDef.density = 1;
-        fixtureDef.filter.categoryBits = BIT_PLAYER;
-        fixtureDef.filter.maskBits = BIT_GROUND;
-        final PolygonShape pShape = new PolygonShape();
-        pShape.setAsBox(0.5f, 0.5f);
-        fixtureDef.shape = pShape;
-        player.createFixture(fixtureDef);
-        pShape.dispose();
     }
 
     private void resetBodieAndFixture(){
@@ -122,14 +98,6 @@ public class GameScreen extends AbstractScreen {
         Gdx.gl.glClearColor(.2f, 0.1f, 1, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        if (directionChange) {
-            player.applyLinearImpulse(
-                    (xFactor * 3 - player.getLinearVelocity().x) * player.getMass(),
-                    (yFactor * 3 - player.getLinearVelocity().y) * player.getMass(),
-                    player.getWorldCenter().x, player.getWorldCenter().y, true
-            );
-        }
-
         viewport.apply(true);
         mapRenderer.setView(gameCamera);
         mapRenderer.render();
@@ -163,49 +131,11 @@ public class GameScreen extends AbstractScreen {
 
     @Override
     public void keyPressed(InputManager manager, GameKeys key) {
-        switch (key){
-            case LEFT:
-                directionChange = true;
-                xFactor = -1;
-                break;
-            case RIGHT:
-                directionChange = true;
-                xFactor = 1;
-                break;
-            case UP:
-                directionChange = true;
-                yFactor = 1;
-                break;
-            case DOWN:
-                directionChange = true;
-                yFactor = -1;
-                break;
-            default:
-                return;
-        }
+
     }
 
     @Override
     public void keyUp(InputManager manager, GameKeys key) {
-        switch (key){
-            case LEFT:
-                directionChange = true;
-                xFactor = manager.isKeyPressed(RIGHT) ? 1: 0;
-                break;
-            case RIGHT:
-                directionChange = true;
-                xFactor = manager.isKeyPressed(LEFT) ? -1: 0;
-                break;
-            case UP:
-                directionChange = true;
-                yFactor = manager.isKeyPressed(DOWN) ? -1: 0;
-                break;
-            case DOWN:
-                directionChange = true;
-                yFactor = manager.isKeyPressed(UP) ? 1: 0;
-                break;
-            default:
-                return;
-        }
+
     }
 }
