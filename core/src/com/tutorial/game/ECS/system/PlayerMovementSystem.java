@@ -3,6 +3,7 @@ package com.tutorial.game.ECS.system;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
+import com.badlogic.gdx.Gdx;
 import com.tutorial.game.ECS.ECSEngine;
 import com.tutorial.game.ECS.component.B2DComponent;
 import com.tutorial.game.ECS.component.PlayerComponent;
@@ -31,18 +32,17 @@ public class PlayerMovementSystem extends IteratingSystem implements GameKeyInpu
 
     @Override
     protected void processEntity(Entity entity, float deltaTime) {
-        final PlayerComponent playerCmp = ECSEngine.playerCmpMapper.get(entity);
-        final B2DComponent b2DCmp = ECSEngine.b2dCmpMapper.get(entity);
-
-
         if (directionChange) {
             directionChange = false;
+            final PlayerComponent playerCmp = ECSEngine.playerCmpMapper.get(entity);
+            final B2DComponent b2DCmp = ECSEngine.b2dCmpMapper.get(entity);
 
             b2DCmp.body.applyLinearImpulse(
-                    (xFactor * 3 - b2DCmp.body.getLinearVelocity().x) * b2DCmp.body.getMass(),
-                    (yFactor * 3 - b2DCmp.body.getLinearVelocity().y) * b2DCmp.body.getMass(),
+                    (xFactor * playerCmp.speed.x - b2DCmp.body.getLinearVelocity().x) * b2DCmp.body.getMass(),
+                    (yFactor * playerCmp.speed.y - b2DCmp.body.getLinearVelocity().y) * b2DCmp.body.getMass(),
                     b2DCmp.body.getWorldCenter().x, b2DCmp.body.getWorldCenter().y, true
             );
+            Gdx.app.debug("PlayerInfo", "Position x: " + b2DCmp.body.getPosition().x + "y:"+ b2DCmp.body.getPosition().y);
         }
     }
 

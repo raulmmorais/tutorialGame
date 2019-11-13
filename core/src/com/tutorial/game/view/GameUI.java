@@ -1,7 +1,5 @@
-package com.tutorial.game.ui;
+package com.tutorial.game.view;
 
-import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.tutorial.game.TutorialGame;
 

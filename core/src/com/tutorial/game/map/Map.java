@@ -40,10 +40,14 @@ public class Map {
             if (mapObject instanceof RectangleMapObject){
                 RectangleMapObject rectangleMapObject = (RectangleMapObject)mapObject;
                 final Rectangle rectangle = rectangleMapObject.getRectangle();
-                startLocator.set(rectangle.x * UNIT_SCALE, rectangle.y * UNIT_SCALE);
+                startLocator.set((rectangle.x * UNIT_SCALE), (rectangle.y * UNIT_SCALE));
                 return;
             }
         }
+    }
+
+    public TiledMap getTiledMap() {
+        return tiledMap;
     }
 
     private void parseCollisionLayer() {

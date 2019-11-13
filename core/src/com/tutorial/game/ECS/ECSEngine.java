@@ -8,8 +8,10 @@ import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
+import com.tutorial.game.ECS.component.AnimationComponent;
 import com.tutorial.game.ECS.component.B2DComponent;
 import com.tutorial.game.ECS.component.PlayerComponent;
+import com.tutorial.game.ECS.system.PlayerCameraSystem;
 import com.tutorial.game.ECS.system.PlayerMovementSystem;
 import com.tutorial.game.TutorialGame;
 
@@ -24,44 +26,47 @@ public class ECSEngine extends PooledEngine {
 
     private final TutorialGame context;
     private final World world;
-    private final BodyDef bodyDef;
-    private final FixtureDef fixtureDef;
 
     public ECSEngine(final TutorialGame context) {
         super();
         this.context = context;
         this.world = context.getWorld();
-        bodyDef = new BodyDef();
-        fixtureDef = new FixtureDef();
 
         this.addSystem(new PlayerMovementSystem(context));
+        this.addSystem(new PlayerCameraSystem(context));
     }
 
-    public void createPlayer(final Vector2 playerSpawnLocation){
+    public void createPlayer(final Vector2 playerLocation, float width, float height){
         final Entity player = this.createEntity();
+        //playerComponent
+        final PlayerComponent playerComponent = this.createComponent(PlayerComponent.class);
+        playerComponent.speed.set(3,3);
+        player.add(playerComponent);
 
+        //box 2d
+        TutorialGame.resetBodiesAndFixture();
         final B2DComponent b2DCmp = this.createComponent(B2DComponent.class);
-        b2DCmp.width = 0.5f;
-        b2DCmp.height = 0.5f;
-        // body
-        bodyDef.gravityScale = 1;
-        bodyDef.position.set(playerSpawnLocation);
-        bodyDef.type = BodyDef.BodyType.DynamicBody;
-        bodyDef.fixedRotation = false;
-        b2DCmp.body = world.createBody(bodyDef);
+        TutorialGame.BODY_DEF.position.set(playerLocation.x, playerLocation.y + height + 0.5f);
+        TutorialGame.BODY_DEF.fixedRotation = true;
+        TutorialGame.BODY_DEF.type = BodyDef.BodyType.DynamicBody;
+        b2DCmp.body = world.createBody(TutorialGame.BODY_DEF);
         b2DCmp.body.setUserData("Player");
-        // fixtures
+        b2DCmp.width = width;
+        b2DCmp.height = height;
+        b2DCmp.renderPosition.set(b2DCmp.body.getPosition());
+        //configure fixture
+        TutorialGame.FIXTURE_DEF.filter.categoryBits = BIT_PLAYER;
+        TutorialGame.FIXTURE_DEF.filter.maskBits = BIT_GROUND;
         final PolygonShape pShape = new PolygonShape();
         pShape.setAsBox(b2DCmp.width * 0.5f, b2DCmp.height * 0.5f);
-        fixtureDef.isSensor = false;
-        fixtureDef.shape = pShape;
-        fixtureDef.filter.categoryBits = BIT_PLAYER;
-        fixtureDef.filter.maskBits = BIT_GROUND;
-        b2DCmp.body.createFixture(fixtureDef);
+        TutorialGame.FIXTURE_DEF.shape = pShape;
+        b2DCmp.body.createFixture(TutorialGame.FIXTURE_DEF);
         pShape.dispose();
         player.add(b2DCmp);
-        final PlayerComponent playerComponent = this.createComponent(PlayerComponent.class);
-        player.add(playerComponent);
+
+        //Animations
+        final AnimationComponent animationComponent = this.createComponent(AnimationComponent.class);
+        player.add(animationComponent);
 
         addEntity(player);
     }

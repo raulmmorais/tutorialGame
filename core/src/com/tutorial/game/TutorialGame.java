@@ -9,18 +9,18 @@ import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.assets.loaders.SkinLoader;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Colors;
-import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
-import com.badlogic.gdx.maps.tiled.TideMapLoader;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.Box2D;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
+import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -33,31 +33,36 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.tutorial.game.ECS.ECSEngine;
 import com.tutorial.game.audio.AudioManager;
 import com.tutorial.game.input.InputManager;
+import com.tutorial.game.map.MapManager;
 import com.tutorial.game.screen.AbstractScreen;
-import com.tutorial.game.screen.LoadingScreen;
 import com.tutorial.game.screen.ScreenType;
+import com.tutorial.game.view.GameRenderer;
 
 import java.util.EnumMap;
 
 public class TutorialGame extends Game {
 	private static final String TAG = TutorialGame.class.getSimpleName();
 
-	public static final float UNIT_SCALE = 1 / 32;
+	public static final BodyDef BODY_DEF = new BodyDef();
+	public static final FixtureDef FIXTURE_DEF = new FixtureDef();
+	public static final float UNIT_SCALE = 1 / 32f;
 	public static final short BIT_PLAYER = 1 << 1;
-	public static final short BIT_BOX = 1 << 2;
 	public static final short BIT_GROUND = 1 << 3;
+
+	private World world;
+	private WorldContactListener worldContactListener;
+	private Box2DDebugRenderer box2DDebugRenderer;
 
 	private AssetManager assetManager;
 	private SpriteBatch spriteBatch;
-	private WorldContactListener worldContactListener;
 	private EnumMap<ScreenType, AbstractScreen> screenCache;
 	private OrthographicCamera camera;
 	private FitViewport screenViewport;
-	private World world;
-	private Box2DDebugRenderer box2DDebugRenderer;
 
-	private static final float FIXED_TIME = 1/60f;
+	private static final float FIXED_TIME_STEP = 1/60f;
 	private float accumulator;
+
+	private MapManager mapManager;
 
 	private Stage stage;
 	private Skin skin;
@@ -68,6 +73,8 @@ public class TutorialGame extends Game {
 	private AudioManager audioManager;
 
 	private ECSEngine ecsEngine;
+
+	private GameRenderer gameRenderer;
 
 	@Override
 	public void create () {
@@ -92,9 +99,15 @@ public class TutorialGame extends Game {
 		inputManager = new InputManager();
 		Gdx.input.setInputProcessor(new InputMultiplexer(inputManager, stage));
 
-		ecsEngine = new ECSEngine(this);
 		camera = new OrthographicCamera();
+
+		mapManager = new MapManager(this);
+
 		screenViewport = new FitViewport(9, 16, camera);
+		ecsEngine = new ECSEngine(this);
+
+		gameRenderer = new GameRenderer(this);
+
 		screenCache = new EnumMap<ScreenType, AbstractScreen>(ScreenType.class);
 		setScreen(ScreenType.LOADING);
 	}
@@ -125,6 +138,14 @@ public class TutorialGame extends Game {
 		assetManager.finishLoading();
 		skin = assetManager.get("ui/hud.json", Skin.class);
 		i18NBundle = assetManager.get("ui/strings", I18NBundle.class);
+	}
+
+	public GameRenderer getGameRenderer() {
+		return gameRenderer;
+	}
+
+	public MapManager getMapManager() {
+		return mapManager;
 	}
 
 	public ECSEngine getEcsEngine() {
@@ -192,19 +213,35 @@ public class TutorialGame extends Game {
 		}
 	}
 
+	public static void resetBodiesAndFixture(){
+		BODY_DEF.position.set(0, 0);
+		BODY_DEF.gravityScale = 1;
+		BODY_DEF.type = BodyDef.BodyType.StaticBody;
+		BODY_DEF.fixedRotation = false;
+
+		FIXTURE_DEF.density = 0;
+		FIXTURE_DEF.isSensor = false;
+		FIXTURE_DEF.restitution = 0;
+		FIXTURE_DEF.friction = 0.2f;
+		FIXTURE_DEF.filter.categoryBits = 0x0001;
+		FIXTURE_DEF.filter.maskBits = -1;
+		FIXTURE_DEF.shape = null;
+	}
+
 	@Override
 	public void render() {
 		super.render();
-
-		ecsEngine.update(Gdx.graphics.getRawDeltaTime());
-		accumulator += Math.min(0.25f, Gdx.graphics.getRawDeltaTime());
-		while (accumulator >= FIXED_TIME){
-			world.step(FIXED_TIME, 6, 2);
-			accumulator -= FIXED_TIME;
+		final float deltaTime = Math.min(0.25f, Gdx.graphics.getRawDeltaTime());
+		ecsEngine.update(deltaTime);
+		accumulator += deltaTime;
+		while (accumulator >= FIXED_TIME_STEP){
+			world.step(FIXED_TIME_STEP, 6, 2);
+			accumulator -= FIXED_TIME_STEP;
 		}
 
+		gameRenderer.render(accumulator / FIXED_TIME_STEP);
 		stage.getViewport().apply();
-		stage.act();
+		stage.act(deltaTime);
 		stage.draw();
 	}
 
@@ -212,6 +249,7 @@ public class TutorialGame extends Game {
 	public void dispose() {
 		super.dispose();
 		box2DDebugRenderer.dispose();
+		gameRenderer.dispose();
 		world.dispose();
 		assetManager.dispose();
 		 spriteBatch.dispose();

@@ -8,8 +8,8 @@ public class CollisionArea {
     private final float[] vertices;
 
     public CollisionArea(final float x, final float y, final float[] vertices) {
-        this.x = x * UNIT_SCALE;
-        this.y = y * UNIT_SCALE;
+        this.x = (x * UNIT_SCALE);
+        this.y = (y * UNIT_SCALE);
         this.vertices = vertices;
         for (int i = 0; i < vertices.length; i++){
             vertices[i] *= UNIT_SCALE;

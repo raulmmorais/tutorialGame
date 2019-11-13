@@ -5,12 +5,14 @@ import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.tutorial.game.TutorialGame;
 import com.tutorial.game.audio.AudioType;
 import com.tutorial.game.input.GameKeys;
 import com.tutorial.game.input.InputManager;
-import com.tutorial.game.ui.LoadingUI;
+import com.tutorial.game.map.MapType;
+import com.tutorial.game.view.LoadingUI;
 
 public class LoadingScreen extends AbstractScreen<LoadingUI> {
     private final AssetManager assetManager;
@@ -20,13 +22,21 @@ public class LoadingScreen extends AbstractScreen<LoadingUI> {
         super(context);
 
         assetManager = context.getAssetManager();
-        assetManager.load("map/map.tmx", TiledMap.class);
+
+        //load characters and effects
+        assetManager.load("characters_and_effects/character_and_effect.atlas", TextureAtlas.class);
+
+        //loading Maps
+        for (MapType mapType : MapType.values()){
+            assetManager.load(mapType.getFilePatch(), TiledMap.class);
+        }
         
         //loading sounds
         isMusicLoaded = false;
         for(final AudioType audioType: AudioType.values()){
             assetManager.load(audioType.getFilepatch(), audioType.isMusic() ? Music.class: Sound.class);
         }
+        viewport.apply();
     }
 
     @Override
@@ -46,11 +56,6 @@ public class LoadingScreen extends AbstractScreen<LoadingUI> {
         }
 
         screenUI.setProgress(assetManager.getProgress());
-
-    }
-
-    @Override
-    public void resize(int width, int height) {
 
     }
 
