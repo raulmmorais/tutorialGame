@@ -9,20 +9,24 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.tutorial.game.ECS.component.AnimationComponent;
+import com.tutorial.game.ECS.component.AnimationType;
 import com.tutorial.game.ECS.component.B2DComponent;
 import com.tutorial.game.ECS.component.PlayerComponent;
+import com.tutorial.game.ECS.system.AnimationSystem;
 import com.tutorial.game.ECS.system.PlayerCameraSystem;
 import com.tutorial.game.ECS.system.PlayerMovementSystem;
 import com.tutorial.game.TutorialGame;
 
 import static com.tutorial.game.TutorialGame.BIT_GROUND;
 import static com.tutorial.game.TutorialGame.BIT_PLAYER;
+import static com.tutorial.game.TutorialGame.UNIT_SCALE;
 
 public class ECSEngine extends PooledEngine {
     private final static String TAG = ECSEngine.class.getSimpleName();
 
     public static final ComponentMapper<PlayerComponent> playerCmpMapper = ComponentMapper.getFor(PlayerComponent.class);
     public static final ComponentMapper<B2DComponent> b2dCmpMapper = ComponentMapper.getFor(B2DComponent.class);
+    public static final ComponentMapper<AnimationComponent> aniCmpMapper = ComponentMapper.getFor(AnimationComponent.class);
 
     private final TutorialGame context;
     private final World world;
@@ -34,6 +38,7 @@ public class ECSEngine extends PooledEngine {
 
         this.addSystem(new PlayerMovementSystem(context));
         this.addSystem(new PlayerCameraSystem(context));
+        this.addSystem(new AnimationSystem(context));
     }
 
     public void createPlayer(final Vector2 playerLocation, float width, float height){
@@ -66,6 +71,9 @@ public class ECSEngine extends PooledEngine {
 
         //Animations
         final AnimationComponent animationComponent = this.createComponent(AnimationComponent.class);
+        animationComponent.aniType = AnimationType.HERO_MOVE_DOWN;
+        animationComponent.width = 64 * UNIT_SCALE * width;
+        animationComponent.height = 64 * UNIT_SCALE * height;
         player.add(animationComponent);
 
         addEntity(player);

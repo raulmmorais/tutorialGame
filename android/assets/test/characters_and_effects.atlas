@@ -1,0 +1,34 @@
+
+characters_and_effects.png
+size: 1024,1024
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+fireball
+  rotate: false
+  xy: 2, 2
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+hero
+  rotate: false
+  xy: 2, 68
+  size: 576, 256
+  orig: 576, 256
+  offset: 0, 0
+  index: -1
+hero2
+  rotate: false
+  xy: 2, 326
+  size: 576, 256
+  orig: 576, 256
+  offset: 0, 0
+  index: -1
+plasmaburst
+  rotate: false
+  xy: 580, 518
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1

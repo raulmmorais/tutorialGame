@@ -25,6 +25,7 @@ public class LoadingScreen extends AbstractScreen<LoadingUI> {
 
         //load characters and effects
         assetManager.load("characters_and_effects/character_and_effect.atlas", TextureAtlas.class);
+        assetManager.load("test/characters_and_effects.atlas", TextureAtlas.class);
 
         //loading Maps
         for (MapType mapType : MapType.values()){
