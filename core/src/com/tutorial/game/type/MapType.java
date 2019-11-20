@@ -1,4 +1,4 @@
-package com.tutorial.game.map;
+package com.tutorial.game.type;
 
 public enum MapType {
     MAP_1("map/map.tmx"),

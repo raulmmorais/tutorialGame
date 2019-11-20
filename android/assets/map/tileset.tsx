@@ -13,7 +13,15 @@
    <frame tileid="7" duration="200"/>
   </animation>
  </tile>
+ <tile id="8">
+  <properties>
+   <property name="type" value="AXE"/>
+  </properties>
+ </tile>
  <tile id="11">
+  <properties>
+   <property name="type" value="CRYSTAL"/>
+  </properties>
   <animation>
    <frame tileid="11" duration="150"/>
    <frame tileid="12" duration="150"/>
@@ -24,6 +32,16 @@
    <frame tileid="17" duration="150"/>
    <frame tileid="18" duration="150"/>
   </animation>
+ </tile>
+ <tile id="19">
+  <properties>
+   <property name="type" value="FIRESTONE"/>
+  </properties>
+ </tile>
+ <tile id="33">
+  <properties>
+   <property name="type" value="MACE"/>
+  </properties>
  </tile>
  <tile id="63">
   <animation>
@@ -54,5 +72,10 @@
    <frame tileid="91" duration="200"/>
    <frame tileid="92" duration="200"/>
   </animation>
+ </tile>
+ <tile id="93">
+  <properties>
+   <property name="type" value="TREE"/>
+  </properties>
  </tile>
 </tileset>

@@ -1,7 +1,8 @@
-package com.tutorial.game.ECS.component;
+package com.tutorial.game.ecs.component;
 
 import com.badlogic.ashley.core.Component;
 import com.badlogic.gdx.utils.Pool;
+import com.tutorial.game.type.AnimationType;
 
 public class AnimationComponent implements Component, Pool.Poolable {
     public AnimationType aniType;

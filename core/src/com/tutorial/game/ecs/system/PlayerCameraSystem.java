@@ -1,24 +1,25 @@
-package com.tutorial.game.ECS.system;
+package com.tutorial.game.ecs.system;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.tutorial.game.ECS.ECSEngine;
-import com.tutorial.game.ECS.component.B2DComponent;
-import com.tutorial.game.ECS.component.PlayerComponent;
+import com.tutorial.game.ecs.ECSEngine;
+import com.tutorial.game.ecs.component.B2DComponent;
+import com.tutorial.game.ecs.component.PlayerComponent;
 import com.tutorial.game.TutorialGame;
 
 public class PlayerCameraSystem extends IteratingSystem {
-    final OrthographicCamera camera;
+    final OrthographicCamera gameCamera;
+
     public PlayerCameraSystem(TutorialGame context){
         super(Family.all(PlayerComponent.class, B2DComponent.class).get());
-        camera = context.getCamera();
+        gameCamera = context.getGameCamera();
     }
 
     @Override
     protected void processEntity(Entity entity, float deltaTime) {
-        camera.position.set(ECSEngine.b2dCmpMapper.get(entity).renderPosition, 0);
-        camera.update();
+        gameCamera.position.set(ECSEngine.b2dCmpMapper.get(entity).renderPosition, 0);
+        //gameCamera.update();
     }
 }

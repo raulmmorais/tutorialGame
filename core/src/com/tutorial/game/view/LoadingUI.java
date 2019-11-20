@@ -1,6 +1,5 @@
 package com.tutorial.game.view;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
@@ -13,10 +12,12 @@ import com.tutorial.game.TutorialGame;
 import com.tutorial.game.input.GameKeys;
 
 public class LoadingUI extends Table {
+    private final String loadingString;
+
     private final ProgressBar progressBar;
-    private final TextButton loading;
-    private final TextButton pressAnyKey;
-    private final String loadingText;
+    private final TextButton pressAnyKeyButton;
+    private final TextButton txtButton;
+
     public LoadingUI(final TutorialGame context) {
         super(context.getSkin());
         setFillParent(true);
@@ -24,42 +25,44 @@ public class LoadingUI extends Table {
         final I18NBundle i18NBundle = context.getI18NBundle();
 
         progressBar = new ProgressBar(0, 1, 0.01f, false, getSkin(), "default");
-        progressBar.setAnimateDuration(1);
-        loadingText = i18NBundle.format("loading");
-        loading = new TextButton(i18NBundle.format("loading"), getSkin(), "normal");
-        loading.getLabel().setWrap(true);
+        //progressBar.setAnimateDuration(1);
 
-        pressAnyKey = new TextButton(i18NBundle.format("pressAnyKey"), getSkin(), "normal");
-        pressAnyKey.getLabel().setWrap(true);
-        pressAnyKey.setVisible(false);
-        pressAnyKey.addListener(new InputListener(){
+        loadingString = i18NBundle.format("loading");
+        txtButton = new TextButton(loadingString, getSkin(), "huge");
+        txtButton.getLabel().setWrap(true);
+
+        pressAnyKeyButton = new TextButton(i18NBundle.format("pressAnyKey"), getSkin(), "normal");
+        pressAnyKeyButton.getLabel().setWrap(true);
+        pressAnyKeyButton.setVisible(false);
+        pressAnyKeyButton.addListener(new InputListener(){
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                context.getInputManager().notifyKeyDown(GameKeys.SELECT);
-                return true;
+            context.getInputManager().notifyKeyDown(GameKeys.SELECT);
+            return true;
             }
         });
 
-        add(pressAnyKey).expand().fill().center().row();
-        add(loading).expandX().fillX().bottom().row();
+        add(pressAnyKeyButton).expand().fill().center().row();
+        add(txtButton).expandX().fillX().bottom().row();
         add(progressBar).expandX().fillX().bottom().pad(20, 25, 20, 25);
-        bottom();
-        //setDebug(true, true);
+        //bottom();
     }
 
     public void setProgress(float progress){
         progressBar.setValue(progress);
-        final StringBuilder stringBuilder = loading.getLabel().getText();
+        final StringBuilder stringBuilder = txtButton.getLabel().getText();
         stringBuilder.setLength(0);
-        stringBuilder.append(loadingText);
-        stringBuilder.append(" (" + progress * 100 + " %)");
-        Gdx.app.debug("Progress", loading.getLabel().toString());
+        stringBuilder.append(loadingString);
+        stringBuilder.append(" (");
+        stringBuilder.append((int) (progress * 100));
+        stringBuilder.append("%)");
+        txtButton.getLabel().invalidateHierarchy();
 
-        if (progress >= 1 && !pressAnyKey.isVisible()){
-            pressAnyKey.setVisible(true);
-            pressAnyKey.setColor(1, 1, 1, 0);
-            pressAnyKey.addAction(Actions.forever(Actions.sequence(Actions.alpha(1, 1), Actions.alpha(0, 1))));
-            loading.addAction(Actions.sequence(Actions.alpha(0, 3)));
+        if (progress >= 1 && !pressAnyKeyButton.isVisible()){
+            pressAnyKeyButton.setVisible(true);
+            pressAnyKeyButton.setColor(1, 1, 1, 0);
+            pressAnyKeyButton.addAction(Actions.forever(Actions.sequence(Actions.alpha(1, 1), Actions.alpha(0, 1))));
+            txtButton.addAction(Actions.sequence(Actions.alpha(0, 3)));
             progressBar.addAction(Actions.sequence(Actions.alpha(0, 4)));
         }
     }

@@ -1,24 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.2" tiledversion="1.2.5" orientation="orthogonal" renderorder="right-up" width="64" height="64" tilewidth="32" tileheight="32" infinite="0" nextlayerid="8" nextobjectid="10">
+<map version="1.2" tiledversion="1.3.0" orientation="orthogonal" renderorder="right-up" compressionlevel="0" width="64" height="64" tilewidth="32" tileheight="32" infinite="0" nextlayerid="8" nextobjectid="17">
  <tileset firstgid="1" source="tileset.tsx"/>
  <layer id="1" name="ground" width="64" height="64" offsetx="64" offsety="0">
   <data encoding="base64" compression="zlib">
-   eJzt0MEJACAMBMHUl/4LsgZFOKITmP9tuqoaAAAAAAAAAAAAAIAxdi+9V3+mW/9b/9CvX79+/fr169ev/4du/Wf96b3671o4JUvV
+   eAHt2kEKwCAMBEDf5/8fVL2V3Ay9rB1BqKDgJuOtc4wxTTVggAEGGGCAAQYYYIABBhhggAEGGGCAAQYYYIABBhhggAEGGGCAAQYYYIABBhhggAEGGGCAAQZiDKxWHY3b/hk/Cr8235T/NPve//f8tWbJ9ahZOmv5c99Ep9/1jP7rf6qBarmzTs2+7/3FkN/7TzXAf78CqT1/37ufPvfNd/O/z/nO7/8DbEtTow==
   </data>
  </layer>
  <layer id="2" name="background_1" width="64" height="64" offsetx="0" offsety="32">
   <data encoding="base64" compression="zlib">
-   eJztl81OAkEQBvslSDTxDKKiqMufZzW+/xPZX7ITe8fdDQcCobcqqQNw2aJnJrNmAAAAAAAAAAAAAAAAAAAAAAAAAAAAcI18uj8Dfl3wuc7Ft/vsbt3G3bhv7qs7GzALmrH6X9wP991dumt3Zfn7H4Kxv+/7aBZKo9Z+aTumX965t+7N2Z/6dAw1bkZ+y9h/cHfBvU2nf27d9f7YWveX/yZbf+3K/u9/nQk6I7QvtFay9cdmzb60xn517+3vrMzQ/2TdWZe9UJrj+m9aM81/Yd1736K1zLrv/GssV3+89+iz1sC9TeP81z0/9us9YEr9uufHfr0HaA1M5f5Xv/do/sf2Ly/wvKdGaz32az+M9dd3xGtH/eXuq56x+WeYd43mPQ/2zT/+P5CDX6HbNa0=
+   eAHtl9tKA0EQRPMTggGf1XiN98uziv//RdYBC5ohG/RxOjVQbGZ3A1unumdnV6uMEAiBEAiBEAiBEAiBEAiBEAiBEAiBEAiBEAiBEAiBEAiBEAiBEAiBEAiBEAiBEAiBEAiBEAiBEAiBEAiBEAiBGQl86KG/F/Q5o6F/PvOX7r+RnqVH6Um6l+6kowXpdItB7vi/ld6lB2kjbaVrqbv/C3m0qn+f4+jzsLH0s8WwT2rf3sjf55f8c++JtJaOpVmHfY4ZswYsXTOnTv7f5Pel6PWA/J8Wr2R++asxf/PpmL+9cmTdr3N6gzWBNYK+oFa69X/1TP72Cgf7xzd94bWyQ/9fyU/N2r1gz/ZP3uyNUKf8z+SHPL3vY46cdfXvvufeLvWPV7/76HHm1MC55Lrwdfv3sUP9s8+3P/zzHXBI/tnnV/98B1ADzn5X/XfKf/zuIf+/+qdeZh/Ues2fftjn33sgjrwLZx/4Z623n335d8h7zIu8YWDtyr/yGf+f+ZwEfgCh2zWt
   </data>
  </layer>
  <layer id="3" name="background_2" width="64" height="64" offsetx="0" offsety="32">
   <data encoding="base64" compression="zlib">
-   eJzt2MEJwzAMQFHv1QU6QX0odP8x2hwCwbgEJaUg5T3QSZf86ObWAAAAAAAAAAAAAAByen3mFphK7i3WVKl/dte9W1frj+7H/9N//VF/dKR/pD8v/ef2C/156T+3X+jPS//xfd9MVmvfY2c/k7l7Fbl/n0x23/qfk32F3lHkzaNi/1W9AYA1F3Y=
+   eAHt00EKwjAQBdDeywt4Al0I3v8YOtDAEFOjy0lfITTptJL/4mybiwABAgQIECBAgAABAgQIECBAgAABAgQIECBAgAABAgQIECBAgAABAgQIECBAgAABAjUFnu9tX/4YNVOOd33dc4+rn0/DaZWrP/PINXqW866WP2fr56Osvc+9/6jQepQvb39Wj3flz2K15rPzndWdv/+//q/V83m3s/6e1fW//j9r/0fuNnJPVZq3/r4dbLrVR+XK597yfMsX7+R6O+t8b79T9Z7z5QyPfZHrK5x3zhjzyPfrWDF/73GW9QuANRd2
   </data>
  </layer>
  <layer id="4" name="foreground_1" width="64" height="64" offsetx="0" offsety="64">
   <data encoding="base64" compression="zlib">
-   eJztwTEBAAAAwqD1T20MH6AAAAAAAAAAAAAAAAAAAACAtwFAAAAB
+   eAHt0DEBAAAAwqD1T20MH4hAYcCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDLwHBkAAAAE=
   </data>
  </layer>
  <objectgroup color="#ff0000" id="7" name="collision">
@@ -29,11 +29,15 @@
    <polyline points="0,0 0,-32 -32,-32 -32,-64 288,-64 288,32 416,32 416,320 352,320 352,384 224,384 224,448 160,448 160,-32 32,-32 32,0"/>
   </object>
   <object id="8" x="128" y="1920" width="32" height="32"/>
-  <object id="9" x="288" y="1888" width="32" height="32"/>
+  <object id="16" gid="20" x="473.378" y="1714.48" width="32" height="32" rotation="-316.219"/>
  </objectgroup>
- <objectgroup id="5" name="gameObjects" offsetx="-64" offsety="32">
-  <object id="2" gid="12" x="124" y="1690.67" width="32" height="32"/>
-  <object id="3" gid="1" x="285.333" y="1883.33" width="32" height="32"/>
+ <objectgroup id="5" name="gameObjects" offsetx="1.33333" offsety="37.3333">
+  <object id="10" gid="12" x="106.366" y="1685.84" width="32" height="32" rotation="22.9147"/>
+  <object id="11" gid="12" x="394.831" y="1721.93" width="32" height="32" rotation="29.7959"/>
+  <object id="12" gid="20" x="480" y="1826.67" width="32" height="32"/>
+  <object id="13" gid="20" x="446.667" y="1825.33" width="32" height="32"/>
+  <object id="14" gid="9" x="417.333" y="1598" width="32" height="32"/>
+  <object id="15" gid="12" x="241.333" y="1608.67" width="32" height="32"/>
  </objectgroup>
  <objectgroup id="6" name="playerStartLocation" offsetx="0" offsety="-32">
   <object id="1" x="206" y="1870.67">

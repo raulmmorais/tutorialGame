@@ -1,5 +1,9 @@
-package com.tutorial.game.screen;
+package com.tutorial.game.type;
 
+
+import com.tutorial.game.screen.AbstractScreen;
+import com.tutorial.game.screen.GameScreen;
+import com.tutorial.game.screen.LoadingScreen;
 
 public enum ScreenType {
     GAME(GameScreen.class),

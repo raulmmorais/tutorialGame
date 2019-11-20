@@ -1,4 +1,4 @@
-package com.tutorial.game.ECS.component;
+package com.tutorial.game.ecs.component;
 
 import com.badlogic.ashley.core.Component;
 import com.badlogic.gdx.math.Vector2;
